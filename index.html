@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta name='viewport' content='user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width'>
+		<title>vRandom Name Picker</title>
+	</head>
+	<body>
+		<h1>vRandom Name Picker</h1>
+		<form>
+			<label for='inputName'>Name: </label><input type='text' placeholder='Name' name='inputName' id='inputName'><br>
+			<input type='button' value='Go' id='btnGo'> <input type='reset' value='Cancel'> 
+			<hr>
+			<input type='button' value='Display All Names' id='btnShow'> <input type='button' value='Delete All Names' id='btnClear'> <input type='button' value='Clear' id='btnShowClear'>
+			<div id='divNameShow' style='width: 100%; word-wrap: break-word;'></div>
+			<hr>
+			<input type='button' value='Get 1 Random Name' id='btnNameGetOne'> <input type='button' value='Clear' id='btnNameGetOneClear'>
+			<div id='divNameOne'></div>
+			<hr>
+			<input type='button' value='Get All Random Names' id='btnNameGetAll'> <input type='button' value='Clear' id='btnNameGetAllClear'>
+			<div id='divNameAll'></div>
+		</form>
+		
+		<script>
+			(function () {
+				'use strict';
+				
+				var allNames = [];
+				
+				document.getElementById('btnGo').onclick = function() { nameSave() };
+				function nameSave() {
+					var tmpName = document.getElementById('inputName').value;
+					if((tmpName == '') || (tmpName == 'null') || (tmpName == undefined)) {
+						console.log('Name is currently: ' + tmpName);
+						document.getElementById('inputName').value = '';
+						alert('Please enter a Name!');
+					} else {
+						tmpName = tmpName.replace(/[^a-zA-Z0-9]/g, '');
+						if((tmpName == '') || (tmpName == 'null') || (tmpName == undefined)) {
+							document.getElementById('inputName').value = '';
+							alert('Please a VALID Name!');
+						} else {
+							allNames.push(tmpName);
+							console.log(allNames);
+							document.getElementById('inputName').value = '';
+						}
+					}	
+				}
+				
+				document.getElementById('btnClear').onclick = function() { nameClear() };
+				function nameClear() {
+					if(allNames == 0) { 
+						alert('No Names to delete!');
+					} else {
+						switch(confirm('About to delete all names! \nProceed?')) {
+						case true:
+							allNames = [];
+							document.getElementById('divNameShow').innerHTML =  '';
+							document.getElementById('divNameOne').innerHTML = '';
+							document.getElementById('divNameAll').innerHTML = '';
+							console.log(allNames);
+							break;
+						case false:
+							console.log(allNames);
+							break;
+						default:
+							console.log('Nothing happened!');
+							break;
+						}
+					}
+				}
+				
+				document.getElementById('btnShow').onclick = function() { nameShow() };
+				function nameShow() {
+					var nameLen = allNames.length;
+					if(nameLen == 0) { 
+						alert('No names to display!\nPlease enter at least one.');
+					} else {
+						document.getElementById('divNameShow').innerHTML = allNames;
+					}
+				}
+				
+				document.getElementById('btnShowClear').onclick = function() { nameShowClear() };
+				function nameShowClear() {
+					document.getElementById('divNameShow').innerHTML = '';
+				}
+				
+				document.getElementById('btnNameGetOne').onclick = function() { nameGetOne() };
+				function nameGetOne() {
+					var nameLen = allNames.length,
+					randomName = Math.floor(Math.random() * nameLen);
+					console.log('nameLen: ' + nameLen);
+					console.log('randomName: ' + randomName);
+					if(nameLen == 0) { 
+						alert('No names to choose from!\nPlease enter at least one.');
+					} else {
+						console.log(allNames[randomName]);
+						document.getElementById('divNameOne').innerHTML = allNames[randomName];
+					}
+				}
+				
+				document.getElementById('btnNameGetOneClear').onclick = function() { nameGetOneClear() };
+				function nameGetOneClear() {
+					document.getElementById('divNameOne').innerHTML = '';
+				}
+				
+				document.getElementById('btnNameGetAll').onclick = function() { nameGetAll() };
+				function nameGetAll() {
+					document.getElementById('divNameAll').innerHTML = '';
+					var allNamesTmp = allNames.slice(0),
+						allNamesTmpLen = allNamesTmp.length;
+						console.log('nameLenTmp: ' + allNamesTmpLen);
+					if(allNamesTmpLen == 0) {
+						alert('No names to display!\nPlease enter some.');
+					} else {
+						for(var i = allNamesTmp.length; i >= 0; i--) {
+							var nameRandom = Math.floor(Math.random() * i);
+							console.log(nameRandom);
+							document.getElementById('divNameAll').innerHTML += '<br>' + allNamesTmp.splice(nameRandom, 1) + '<br>';
+						}
+					}
+				}
+				
+				document.getElementById('btnNameGetAllClear').onclick = function() { nameGetAllClear() };
+				function nameGetAllClear() {
+					document.getElementById('divNameAll').innerHTML = '';
+				}
+			})();
+		</script>
+		<!-- 
+			Project:	 vRandom Name Picker
+			Author:		 vmcampos <vmcampos@vmcampos.com>
+			Date:		 2016-07-01
+			Version:	 1.0.20160703
+			Description: App to choose from a random set of input names. 
+		-->
+	</body>
+</html>
